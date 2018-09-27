@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 
+    private val listFragment by lazy {
+        ListFragment.newInstance()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                     } ?: run {
                         // ok - date received
                         Log.d(LOG_TAG, "ok - date received")
-                        replaceFragment(ListFragment.newInstance())
+                        replaceFragment(listFragment)
                     }
                 })
 
