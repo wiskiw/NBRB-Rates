@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.nbrb_rates.wiskiw.nbrb_rates.R
+import com.nbrb_rates.wiskiw.nbrb_rates.repository.CurrencyRateRepository
 import com.nbrb_rates.wiskiw.nbrb_rates.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        mainViewModel.debug(CurrencyRateRepository(this))
 
     }
 
