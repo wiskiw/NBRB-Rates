@@ -6,6 +6,7 @@ import android.content.Context
 import android.util.Log
 import com.android.volley.Response
 import com.nbrb_rates.wiskiw.nbrb_rates.model.CurrencyRate
+import com.nbrb_rates.wiskiw.nbrb_rates.model.CurrencyRateListWrapper
 import com.nbrb_rates.wiskiw.nbrb_rates.repository.networking.NbrbNetworkService
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -27,14 +28,19 @@ class CurrencyRateRepository(context: Context) {
 
     private val nbrbNetworkService = NbrbNetworkService(context)
 
-    fun getRates(): LiveData<List<CurrencyRate>> {
+    fun getRates(): LiveData<CurrencyRateListWrapper> {
         Log.d(LOG_TAG, "getRates is called")
 
-        val data = MutableLiveData<List<CurrencyRate>>()
+        val ratesResult = MutableLiveData<CurrencyRateListWrapper>()
+
 
         nbrbNetworkService.loadCurrencyRates(Response.Listener { pullParser ->
-            data.value = parseXml(pullParser)
-            Log.d(LOG_TAG, "loadCurrencyRates success, ${data.value?.size} loaded")
+            try {
+                ratesResult.value?.data = parseXml(pullParser)
+                Log.d(LOG_TAG, "loadCurrencyRates success, ${ratesResult.value?.data?.size} loaded")
+            } catch (e: XmlPullParserException) {
+                ratesResult.value?.error = e
+            }
 
             // fixme : remove debug stuff
             /*
@@ -45,13 +51,12 @@ class CurrencyRateRepository(context: Context) {
 
         }, Response.ErrorListener {
             Log.w(LOG_TAG, it.localizedMessage, it)
+            ratesResult.value?.error = it
         })
 
-
-        return data
+        return ratesResult
     }
 
-    // TODO : Surround by try catch
     @Throws(XmlPullParserException::class)
     private fun parseXml(pullParser: XmlPullParser): ArrayList<CurrencyRate> {
         val rateList = arrayListOf<CurrencyRate>()
