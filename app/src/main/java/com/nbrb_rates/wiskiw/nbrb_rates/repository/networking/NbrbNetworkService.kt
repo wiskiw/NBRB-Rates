@@ -11,10 +11,10 @@ class NbrbNetworkService(val context: Context) {
         private const val RATES_URL = "http://www.nbrb.by/Services/XmlExRates.aspx"
     }
 
+    // Make get request to rate's endpoint
     fun loadCurrencyRates(listener: Response.Listener<XmlPullParser>,
                           errorListener: Response.ErrorListener) {
         XmlPullRequest(RATES_URL, listener, errorListener).let {
-            // Add the request to the RequestQueue.
             val queue = Volley.newRequestQueue(context)
             queue.add(it)
         }

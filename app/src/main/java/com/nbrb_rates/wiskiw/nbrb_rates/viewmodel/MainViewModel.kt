@@ -1,15 +1,12 @@
 package com.nbrb_rates.wiskiw.nbrb_rates.viewmodel
 
-import android.arch.lifecycle.ViewModel
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import com.nbrb_rates.wiskiw.nbrb_rates.repository.CurrencyRateRepository
 
-class MainViewModel : ViewModel() {
+class MainViewModel(app: Application) : AndroidViewModel(app) {
 
-    fun debug(repository: CurrencyRateRepository) {
-
-        val currencyRateList = repository.getRates()
-
-    }
-
+    private val repository = CurrencyRateRepository(app)
+    val currencyRateList = repository.getRates()
 
 }

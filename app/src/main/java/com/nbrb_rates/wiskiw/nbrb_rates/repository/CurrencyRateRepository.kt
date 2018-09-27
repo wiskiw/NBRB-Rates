@@ -10,6 +10,7 @@ import com.nbrb_rates.wiskiw.nbrb_rates.model.CurrencyRateListWrapper
 import com.nbrb_rates.wiskiw.nbrb_rates.repository.networking.NbrbNetworkService
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
+import java.io.IOException
 
 
 class CurrencyRateRepository(context: Context) {
@@ -28,26 +29,28 @@ class CurrencyRateRepository(context: Context) {
 
     private val nbrbNetworkService = NbrbNetworkService(context)
 
+    // Receiving currency rate list
     fun getRates(): LiveData<CurrencyRateListWrapper> {
-        Log.d(LOG_TAG, "getRates is called")
-
         val ratesResult = MutableLiveData<CurrencyRateListWrapper>()
 
-
         nbrbNetworkService.loadCurrencyRates(Response.Listener { pullParser ->
+            ratesResult.value = CurrencyRateListWrapper()
             try {
                 ratesResult.value?.data = parseXml(pullParser)
-                Log.d(LOG_TAG, "loadCurrencyRates success, ${ratesResult.value?.data?.size} loaded")
+
+                // Check if any rates found
+                val noOneFoundEx = IOException("No one currency rates wasn't loaded/found")
+                ratesResult.value?.data?.let {
+                    if (it.isEmpty()) {
+                        ratesResult.value?.error = noOneFoundEx
+                    }
+                } ?: run {
+                    ratesResult.value?.error = noOneFoundEx
+                }
+
             } catch (e: XmlPullParserException) {
                 ratesResult.value?.error = e
             }
-
-            // fixme : remove debug stuff
-            /*
-            data.value?.forEach {
-                Log.i(LOG_TAG, "it: $it")
-            }
-            */
 
         }, Response.ErrorListener {
             Log.w(LOG_TAG, it.localizedMessage, it)
