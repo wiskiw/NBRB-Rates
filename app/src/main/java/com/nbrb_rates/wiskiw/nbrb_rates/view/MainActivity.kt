@@ -17,6 +17,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val LOG_TAG = "NBRB-MainAct"
+
+        private const val LIST_FRAGMENT_TAG = "List-Fragment"
+        private const val MSG_FRAGMENT_TAG = "Message-Fragment"
+        private const val LOADING_FRAGMENT_TAG = "Loading-Fragment"
     }
 
     private val mainViewModel: MainViewModel by lazy {
@@ -31,28 +35,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        replaceFragment(LoadingFragment.newInstance())
 
         mainViewModel.currencyRateList.observe(this,
                 Observer<CurrencyRateListWrapper> {
+                    Log.d(LOG_TAG, "Data state: ${it?.state}")
                     if (it == null) return@Observer
-                    it.error?.let { error ->
-                        // something went wrong
-                        Log.w(LOG_TAG, "Something went wrong", error)
-                        replaceFragment(MessageFragment.newInstance(error.localizedMessage))
-                    } ?: run {
-                        // ok - date received
-                        Log.d(LOG_TAG, "ok - date received")
-                        replaceFragment(listFragment)
+
+                    //Checking data state
+                    when (it.state) {
+                        CurrencyRateListWrapper.State.LOADING -> {
+                            replaceFragment(LoadingFragment.newInstance(), LOADING_FRAGMENT_TAG)
+                        }
+
+                        CurrencyRateListWrapper.State.DONE -> {
+                            // ok - date received
+                            replaceFragment(listFragment, LIST_FRAGMENT_TAG)
+                        }
+
+                        CurrencyRateListWrapper.State.ERROR -> {
+                            // something went wrong
+                            replaceFragment(
+                                    MessageFragment.newInstance(it.error?.localizedMessage ?: ""),
+                                    MSG_FRAGMENT_TAG
+                            )
+                        }
                     }
                 })
-
     }
 
-    private fun replaceFragment(frg: Fragment) {
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, frg)
-            commit()
+    private fun replaceFragment(frg: Fragment, tag: String) {
+        val currentFragment = supportFragmentManager.findFragmentByTag(tag)
+        if (currentFragment == null || currentFragment.isVisible) {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragment_container, frg, tag)
+                commit()
+            }
         }
     }
 }

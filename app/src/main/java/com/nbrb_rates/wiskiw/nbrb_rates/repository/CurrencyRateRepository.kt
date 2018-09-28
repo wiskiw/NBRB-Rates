@@ -33,29 +33,40 @@ class CurrencyRateRepository(context: Context) {
     fun getRates(): LiveData<CurrencyRateListWrapper> {
         val ratesResult = MutableLiveData<CurrencyRateListWrapper>()
 
-        nbrbNetworkService.loadCurrencyRates(Response.Listener { pullParser ->
-            ratesResult.value = CurrencyRateListWrapper()
-            try {
-                ratesResult.value?.data = parseXml(pullParser)
+        nbrbNetworkService.loadCurrencyRates(
+                // Success request listener
+                Response.Listener { pullParser ->
+                    ratesResult.value = CurrencyRateListWrapper()
+                    try {
+                        // Parsing xml response
+                        ratesResult.value?.data = parseXml(pullParser)
 
-                // Check if any rates found
-                val noOneFoundEx = IOException("No one currency rates wasn't loaded/found")
-                ratesResult.value?.data?.let {
-                    if (it.isEmpty()) {
-                        ratesResult.value?.error = noOneFoundEx
+                        // Check if any rates found
+                        val noOneFoundEx = IOException("No one currency rates wasn't loaded/found")
+                        ratesResult.value?.data?.let {
+                            if (it.isEmpty()) {
+                                ratesResult.value?.error = noOneFoundEx
+                            }
+                        } ?: run {
+                            ratesResult.value?.error = noOneFoundEx
+                        }
+
+                    } catch (e: XmlPullParserException) {
+                        ratesResult.value?.error = e
                     }
-                } ?: run {
-                    ratesResult.value?.error = noOneFoundEx
-                }
 
-            } catch (e: XmlPullParserException) {
-                ratesResult.value?.error = e
-            }
+                    // posting LiveData response
+                    ratesResult.postValue(ratesResult.value)
+                },
+                // Error request listener
+                Response.ErrorListener {
+                    // display/save error
+                    Log.w(LOG_TAG, it.localizedMessage, it)
+                    ratesResult.value?.error = it
 
-        }, Response.ErrorListener {
-            Log.w(LOG_TAG, it.localizedMessage, it)
-            ratesResult.value?.error = it
-        })
+                    // posting LiveData response
+                    ratesResult.postValue(ratesResult.value)
+                })
 
         return ratesResult
     }
