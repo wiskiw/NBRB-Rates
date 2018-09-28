@@ -7,14 +7,17 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.nbrb_rates.wiskiw.nbrb_rates.R
 import com.nbrb_rates.wiskiw.nbrb_rates.model.CurrencyRateListWrapper
+import com.nbrb_rates.wiskiw.nbrb_rates.view.fragment.list.DragDropItemTouchHelperCallback
 import com.nbrb_rates.wiskiw.nbrb_rates.view.fragment.list.RateRecyclerViewAdapter
 import com.nbrb_rates.wiskiw.nbrb_rates.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.fragment_list.view.*
+
 
 class ListFragment() : Fragment() {
 
@@ -46,6 +49,9 @@ class ListFragment() : Fragment() {
                     // setup adapter
                     val adapter = RateRecyclerViewAdapter(activity!!)
                     frgView.recycler_view.adapter = adapter
+
+                    val callback = DragDropItemTouchHelperCallback(adapter)
+                    ItemTouchHelper(callback).attachToRecyclerView(frgView.recycler_view)
 
                     // fill adapter
                     it?.data?.let { items -> adapter.refill(items) }

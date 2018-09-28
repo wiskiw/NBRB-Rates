@@ -1,5 +1,6 @@
 package com.nbrb_rates.wiskiw.nbrb_rates.view.fragment.list
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,9 +9,12 @@ import android.view.ViewGroup
 import com.nbrb_rates.wiskiw.nbrb_rates.R
 import com.nbrb_rates.wiskiw.nbrb_rates.model.CurrencyRate
 import kotlinx.android.synthetic.main.currency_list_item.view.*
+import java.util.*
+
 
 class RateRecyclerViewAdapter(val context: Context) :
-        RecyclerView.Adapter<RateRecyclerViewAdapter.RateViewHolder>() {
+        RecyclerView.Adapter<RateRecyclerViewAdapter.RateViewHolder>(),
+        DragDropItemTouchHelperCallback.DragDropItemTouchHelperAdapter {
 
     private var items: List<CurrencyRate> = emptyList()
 
@@ -28,6 +32,8 @@ class RateRecyclerViewAdapter(val context: Context) :
 
     override fun getItemCount() = items.size
 
+    // IDE annotation
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RateRecyclerViewAdapter.RateViewHolder, pos: Int) {
         val rateItem = items[pos]
 
@@ -40,6 +46,22 @@ class RateRecyclerViewAdapter(val context: Context) :
             numCodeTextView.text = rateItem.numCode.toString()
         }
 
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        if (fromPosition < items.size && toPosition < items.size) {
+            if (fromPosition < toPosition) {
+                for (i in fromPosition until toPosition) {
+                    Collections.swap(items, i, i + 1)
+                }
+            } else {
+                for (i in fromPosition downTo toPosition + 1) {
+                    Collections.swap(items, i, i - 1)
+                }
+            }
+            notifyItemMoved(fromPosition, toPosition)
+        }
+        return true
     }
 
     // IDE annotation
