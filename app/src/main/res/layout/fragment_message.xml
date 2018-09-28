@@ -7,8 +7,10 @@
 
     <TextView
         android:id="@+id/message_textview"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="message fragment" />
+        android:gravity="center"
+        tools:text="message fragment" />
 
 </FrameLayout>

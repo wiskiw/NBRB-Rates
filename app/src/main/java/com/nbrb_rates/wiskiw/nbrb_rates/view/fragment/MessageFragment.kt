@@ -17,12 +17,12 @@ class MessageFragment : Fragment() {
         private const val MSG_BUNDLE_KEY = "bundle_msg"
 
         @JvmStatic
-        fun newInstance(msg: String): LoadingFragment {
+        fun newInstance(msg: String): MessageFragment {
             val bundle = Bundle().apply {
                 putString(MSG_BUNDLE_KEY, msg)
             }
 
-            return LoadingFragment().apply {
+            return MessageFragment().apply {
                 arguments = bundle
             }
         }

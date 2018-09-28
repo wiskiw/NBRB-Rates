@@ -32,11 +32,11 @@ class CurrencyRateRepository(context: Context) {
     // Receiving currency rate list
     fun getRates(): LiveData<CurrencyRateListWrapper> {
         val ratesResult = MutableLiveData<CurrencyRateListWrapper>()
+        ratesResult.value = CurrencyRateListWrapper()
 
         nbrbNetworkService.loadCurrencyRates(
                 // Success request listener
                 Response.Listener { pullParser ->
-                    ratesResult.value = CurrencyRateListWrapper()
                     try {
                         // Parsing xml response
                         ratesResult.value?.data = parseXml(pullParser)
