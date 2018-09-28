@@ -34,6 +34,10 @@ class RateRecyclerViewAdapter(val context: Context) :
         holder.apply {
             idTextView.text = rateItem.id.toString()
             nameTextView.text = rateItem.name
+            charCodeTextView.text = rateItem.charCode
+            rateTextView.text = "%.2f".format(rateItem.rate)
+            scaleTextView.text = rateItem.scale.toString()
+            numCodeTextView.text = rateItem.numCode.toString()
         }
 
     }
@@ -43,6 +47,10 @@ class RateRecyclerViewAdapter(val context: Context) :
     class RateViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val idTextView = view.id_text
         val nameTextView = view.name_text
+        val charCodeTextView = view.char_code_text
+        val rateTextView = view.rate_text
+        val scaleTextView = view.scale_text
+        val numCodeTextView = view.num_code_text
     }
 
 }
