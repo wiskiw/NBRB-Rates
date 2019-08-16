@@ -2,10 +2,26 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="List.Item" parent="AppTheme">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Text.Label.Primary" parent="@style/Base.TextAppearance.AppCompat.Large">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Text.Label.Secondary" parent="@style/Base.TextAppearance.AppCompat.Medium">
+    </style>
+
+
+    <style name="Text.Secondary" parent="@style/Base.TextAppearance.AppCompat.Small">
     </style>
 
 </resources>

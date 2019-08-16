@@ -6,12 +6,13 @@ import android.net.NetworkInfo
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.Volley
+import com.nbrb_rates.wiskiw.nbrb_rates.R
 import org.xmlpull.v1.XmlPullParser
 
-class NbrbNetworkService(val context: Context) {
+class NbrbNetworkService(private val context: Context) {
 
     companion object {
-        private const val RATES_URL = "http://www.nbrb.by/Services/XmlExRates.aspx"
+        private const val RATES_URL = "http://www.nbrb.by/services/xmlExRates.aspx"
     }
 
     // Make get request to rate's endpoint

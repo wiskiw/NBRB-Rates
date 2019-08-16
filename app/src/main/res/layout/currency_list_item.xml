@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    style="@style/List.Item">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,17 +18,17 @@
 
             <TextView
                 android:id="@+id/id_text"
-                style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/Text.Secondary"
                 tools:text="id_text" />
 
             <TextView
                 android:id="@+id/num_code_text"
-                style="@style/Base.TextAppearance.AppCompat.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                style="@style/Text.Secondary"
                 tools:text="char_code_text" />
 
         </FrameLayout>
@@ -44,10 +42,10 @@
 
         <TextView
             android:id="@+id/name_text"
-            style="@style/Base.TextAppearance.AppCompat.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
+            style="@style/Text.Label.Secondary"
             tools:text="NAME" />
 
         <RelativeLayout
@@ -56,19 +54,18 @@
 
             <TextView
                 android:id="@+id/char_code_text"
-                style="@style/Base.TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="true"
+                style="@style/Text.Label.Primary"
                 tools:text="USD" />
 
             <TextView
                 android:id="@+id/rate_text"
-                style="@style/Base.TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@+id/scale_text"
                 android:layout_toLeftOf="@+id/scale_text"
+                style="@style/Text.Label.Primary"
                 tools:text="2.04" />
 
             <TextView
@@ -80,6 +77,7 @@
                 android:paddingLeft="4dp"
                 android:paddingTop="2dp"
                 android:paddingRight="4dp"
+                style="@style/Text.Secondary"
                 tools:text="1" />
 
         </RelativeLayout>
